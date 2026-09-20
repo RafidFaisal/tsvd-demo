@@ -1,0 +1,5 @@
+iterations,runs,completed_runs,avg_elapsed_millis,avg_delay_injections,conflict_detected
+10,5,5,126,1,true
+100,5,5,307,1,true
+1000,5,5,2322,1,true
+10000,5,5,33478,1,true

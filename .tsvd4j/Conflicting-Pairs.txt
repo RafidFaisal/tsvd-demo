@@ -1,0 +1,2 @@
+org/apache/log4j/helpers/AppenderAttachableImpl|size|21:org/apache/log4j/helpers/AppenderAttachableImpl|addElement|15
+org/apache/log4j/helpers/AppenderAttachableImpl|elementAt|24:org/apache/log4j/helpers/AppenderAttachableImpl|addElement|15

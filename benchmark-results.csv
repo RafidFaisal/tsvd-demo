@@ -1,9 +1,0 @@
-iterations,mode,runs,completed_runs,avg_elapsed_millis,avg_delay_injections,conflict_detected
-10,baseline,5,5,22,0,false
-10,tsvd4j,5,5,1028,20,true
-100,baseline,5,3,212,0,false
-100,tsvd4j,5,5,10260,110,true
-1000,baseline,5,0,,0,false
-1000,tsvd4j,5,5,2212,13,true
-10000,baseline,5,0,,0,false
-10000,tsvd4j,5,5,82076,721,true

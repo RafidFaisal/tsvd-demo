@@ -1,68 +1,35 @@
-# Legacy TSVD4J Benchmark Archive
+# TSVD4J first-iteration stress study
 
-This directory preserves the original loop benchmark used to study TSVD4J's
-delay accumulation. It uses the shared `Vector` workload in `src/main/java`
-and the concurrent test in `src/test/java`.
+This branch keeps the two tool variants separate and compares them on the same Java concurrency subjects.
 
-The legacy workload is intended to
-exercise repeated delay injection across the loop. Its main result is whether
-TSVD4J detects a conflicting pair after the complete workload.
+## Layout
 
-## Run One Test
+- [TSVD4J-original](TSVD4J-original): the unmodified TSVD4J distribution
+- [TSVD4J-first-iteration](TSVD4J-first-iteration): the modified variant that limits delay injection to the first relevant access
+- [benchmarks](benchmarks): small JaConTeBe-style concurrency subjects used to stress the detector
 
-From this directory, run a single configuration:
-
-```bash
-cd /home/rafid/tsvd-demo/Test
-mvn -q \
-  -Dbenchmark.iterations=10 \
-  -Dtest=org.apache.log4j.helpers.AppenderAttachableTest \
-  tsvd4j:tsvd4j
-```
-
-Replace `10` with another iteration count such as `100`, `1000`, or `10000`.
-The test prints elapsed time and TSVD4J writes detected conflicts under
-`.tsvd4j/`.
-
-## Run Benchmark Matrix
-
-The archived runner executes each configured iteration count five times and
-calculates average elapsed time, delay injections, and conflict detection:
+## Run one benchmark under the original tool
 
 ```bash
 cd /home/rafid/tsvd-demo
-chmod +x benchmark-tsvd4j.sh
-./benchmark-tsvd4j.sh
+mvn -q -f TSVD4J-original/pom.xml install
+mvn -q -f benchmarks/collection-threshold test tsvd4j:tsvd4j
 ```
 
-Results are written to:
-
-```text
-/home/rafid/tsvd-demo/benchmark-results.csv
-```
-
-The runner currently uses these iteration counts:
+## Run the same benchmark under the first-iteration tool
 
 ```bash
-iterations=(10 100 1000 10000)
+cd /home/rafid/tsvd-demo
+mvn -q -f TSVD4J-first-iteration/pom.xml install
+mvn -q -f benchmarks/collection-threshold test tsvd4j:tsvd4j
 ```
 
-Change `testNumber` to change the number of repeated runs.
+## Run the whole suite
 
-## Archived Results
-
-The checked-in `benchmark-results.csv` records the legacy run results:
-
-```text
-iterations,mode,runs,completed_runs,avg_elapsed_millis,avg_delay_injections,conflict_detected
-10,baseline,5,5,22,0,false
-10,tsvd4j,5,5,1028,20,true
-100,baseline,5,3,212,0,false
-100,tsvd4j,5,5,10260,110,true
-1000,baseline,5,0,,0,false
-1000,tsvd4j,5,5,2212,13,true
-10000,baseline,5,0,,0,false
-10000,tsvd4j,5,5,82076,721,true
-
+```bash
+cd /home/rafid/tsvd-demo
+./benchmarks/run-suite.sh
 ```
+
+The purpose is to discover whether the first-iteration optimization misses real conflicts on late-state concurrency patterns.
 
